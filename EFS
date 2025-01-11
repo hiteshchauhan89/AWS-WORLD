@@ -1,0 +1,145 @@
+What is EFS?
+
+Amazon Elastic File System (EFS) is a scalable, cloud-native file storage service offered by AWS. It provides a simple, managed file storage solution for workloads that require file-level access, making it ideal for use cases such as web serving, content management, data sharing, and backup.
+
+Amazon EFS supports the Network File System version 4 (NFSv4.1 and NFSv4.0) protocol, so the applications and tools that you use today work seamlessly with Amazon EFS. Amazon EFS is accessible across most types of Amazon Web Services compute instances, including Amazon EC2, Amazon ECS, Amazon EKS, AWS Lambda, and AWS Fargate.
+
+Key Features of AWS EFS
+
+Scalable and Elastic:
+
+Automatically scales to accommodate growing or shrinking storage needs.
+
+Supports petabyte-scale storage.
+
+Fully Managed:
+
+AWS handles the underlying infrastructure, so you don’t need to manage hardware or software.
+
+File System Interface:
+
+Provides a standard file system interface and file system semantics (e.g., file locking).
+
+High Availability and Durability:
+
+Stores data redundantly across multiple Availability Zones (AZs).
+
+Built for durability and fault tolerance.
+
+Performance Modes:
+
+General Purpose: Suitable for latency-sensitive use cases like web serving and content management.
+
+Max I/O: Designed for high-throughput applications and large-scale data processing.
+
+Access and Integration:
+
+Supports multiple EC2 instances accessing the same file system.
+
+Compatible with Linux-based workloads.
+
+Easily integrates with AWS services like Lambda, ECS, and Kubernetes.
+
+Cost-Effective:
+
+Pay only for the storage you use (per GB per month).
+
+Offers lifecycle management to automatically move files to lower-cost storage classes.
+
+Security and Compliance:
+
+Supports encryption of data at rest and in transit.
+
+Integrates with AWS Identity and Access Management (IAM) for access control.
+
+Complies with industry standards like HIPAA, GDPR, and ISO.
+
+Storage Classes:
+
+Standard: Designed for frequently accessed data.
+
+Infrequent Access (IA): Optimized for files that are accessed less frequently, offering lower storage costs.
+
+Common Use Cases
+
+Web Serving: Hosting web applications with shared storage needs.
+
+Big Data Analytics: Enabling shared access to large datasets for analysis.
+
+Content Management: Providing scalable storage for digital content like images, videos, and documents.
+
+Container Storage: Supporting persistent storage for containers in ECS or Kubernetes.
+
+Media Processing: Storing media files for post-production workflows.
+
+Backup and Archiving: Centralized and reliable backup storage.
+
+How to Get Started with AWS EFS
+
+To connect an Amazon Elastic File System (EFS) to an EC2 instance, follow these steps:
+
+Step 1: Prerequisites
+
+EFS File System: Ensure you have an EFS file system created in the same AWS region and VPC as your EC2 instance.
+
+EC2 Instance: Your EC2 instance must:
+
+Be in the same VPC as the EFS file system.
+
+Have the NFS client installed.
+
+Be associated with a security group that allows inbound/outbound traffic to the EFS mount target (TCP port 2049).
+
+Step 2: Install the EFS Utilities
+
+SSH into your EC2 instance.
+
+Install the amazon-efs-utils package (recommended for EFS mounting):
+
+sudo yum install -y amazon-efs-utils # For Amazon Linux and Amazon Linux sudo apt-get install -y amazon-efs-utils # For Ubuntu 
+
+ If amazon-efs-utils is not available for your OS, install the NFS client.
+
+sudo yum install -y nfs-utils # Amazon Linux sudo apt-get install -y nfs-common # Ubuntu
+
+Step 3: Mount the EFS File System
+
+Step 1.Find the EFS File System ID:
+
+Go to the EFS Management Console.
+
+Note down the File System ID (e.g., fs-12345678).
+
+Step 2.Mount Using DNS Name: Use the following command to mount the EFS:
+
+sudo mkdir -p /mnt/efs
+sudo mount -t efs fs-12345678:/ /mnt/efs
+
+Replace fs-12345678 with your EFS file system ID.
+
+Step 3.Mount Using IP Address (if DNS resolution is unavailable): Retrieve the IP address of the EFS mount target from the EFS Console and run:
+
+sudo mount -t nfs4 <mount_target_ip>:/ /mnt/efs
+
+Step 4: Verify the Mount
+
+Run the following command to ensure the file system is mounted:
+
+df -h
+
+Security Group Configuration
+
+Ensure the security group associated with your EC2 instance allows outbound traffic on TCP port 2049.
+
+The security group associated with the EFS mount targets should allow inbound traffic on TCP port 2049 from the EC2 instance’s security group.
+
+Step 4: Test File Access
+
+Create a file to verify access:
+
+sudo touch /mnt/efs/testfile.txt
+ls -l /mnt/efs
+
+That's It for the same.
+
+For More Information:-https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html
